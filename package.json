@@ -1,0 +1,74 @@
+{
+  "name": "imavatar-partner",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
+    "@tanstack/match-sorter-utils": "^8.7.6",
+    "@tanstack/react-table": "^8.7.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.10",
+    "@types/react": "^18.0.26",
+    "@types/react-bootstrap": "^0.32.32",
+    "@types/react-dom": "^18.0.9",
+    "@types/react-redux": "^7.1.24",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
+    "axios": "^1.3.3",
+    "bootstrap": "^4.1.1",
+    "crypto-js": "^4.1.1",
+    "env-cmd": "^10.1.0",
+    "file-saver": "^2.0.5",
+    "formik": "^2.2.9",
+    "harsh-uid": "^1.3.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.0",
+    "react-custom-checkbox": "^3.1.5",
+    "react-dom": "^18.2.0",
+    "react-file-base64": "^1.0.3",
+    "react-hook-form": "^7.41.0",
+    "react-icons": "^4.8.0",
+    "react-otp-input": "^2.4.0",
+    "react-paginate": "^8.1.4",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.5.0",
+    "react-scripts": "5.0.1",
+    "react-table": "^7.8.0",
+    "react-toastify": "^9.1.1",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.2",
+    "typescript": "^4.9.4",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start:dev": "env-cmd -f .env.dev react-scripts start",
+    "build": "react-scripts build",
+    "build:dev": "env-cmd -f .env.dev react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/react-table": "^7.7.14",
+    "eslint-config-prettier": "^8.5.0"
+  }
+}
