@@ -100,13 +100,10 @@ const ChangePassword = () => {
         onSubmit={handleSubmit((d) => {
           const params = {
             userId: JSON.parse(decrypt(localStorage.getItem('userData'))).id,
-            newPassword: d.newPassword,
-            oldPassword: password.oldPassword,
+            newPassword: encryptPassword(d.newPassword, 'imavatar'),
+            oldPassword: encryptPassword(password.oldPassword, 'imavatar'),
           };
           var data = params;
-
-          console.log(data);
-
 
           var config = {
             method: 'post',

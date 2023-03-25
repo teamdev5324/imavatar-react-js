@@ -7,11 +7,11 @@ const OnboardingVerified = () => {
 
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         navigate('/profile/details');
-    //     }, 5000);
-    // }, []);
+    useEffect(() => {
+        setTimeout(() => {
+            navigate('/profile/details');
+        }, 5000);
+    }, []);
 
     return (<>
         <div className="flows">

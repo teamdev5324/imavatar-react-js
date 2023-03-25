@@ -152,7 +152,7 @@ const GSTIN = () => {
             } else {
                 toast.error('Can not change GSTIN details during review', {
                     position: "top-right",
-                    autoClose: 3500,
+                    autoClose: 1500,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,

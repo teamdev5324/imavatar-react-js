@@ -124,6 +124,38 @@ const Notification = () => {
     }
   });
 
+  // const callApi = (val) => {
+  //   var data = JSON.stringify({
+  //     "activateNumber": true,
+  //     "notifyOnWhatsapp": true,
+  //     "whatsappNumber": val
+  //   });
+
+  //   var config = {
+  //     method: 'put',
+  //     maxBodyLength: Infinity,
+  //     url: 'http://18.234.206.45:8085/api/v1/partner/profile/whatsappInfo',
+  //     headers: {
+  //       'Authorization': 'Bearer ' + props.userDetails.login_token,
+  //       'Content-Type': 'application/json'
+  //     },
+  //     data: data
+  //   };
+
+  //   axios(config)
+  //     .then(function (res) {
+  //       res = res;
+  //       if (res.data.status === 'SUCCESS') {
+  //         alert('Subscribed successfully');
+  //       } else {
+  //         toast.error('Something went wrong');
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }
+
   // console.log(JSON.parse(decrypt(localStorage.getItem('userData'))));
 
 

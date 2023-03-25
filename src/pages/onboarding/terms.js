@@ -20,6 +20,92 @@ import { saveAs } from 'file-saver';
 
 const Terms = () => {
 
+    // const apiSubmit = async () => {
+    //     const config = {
+    //         method: 'get',
+    //         maxBodyLength: Infinity,
+    //         url: 'http://18.234.206.45:8085/api/v1/partner/profile',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + props.userDetails.login_token,
+    //         }
+    //     };
+
+    //     let { data } = await axios(config);
+    //     data = data.results.aggreements;
+    //     // console.log(data);
+    //     const terms_ = [];
+    //     data.forEach((item, index) => {
+    //         terms_[index] = { termId: item.term.id, isAccepted: true };
+    //     });
+
+    //     const config_ = {
+    //         method: 'put',
+    //         maxBodyLength: Infinity,
+    //         url: 'http://18.234.206.45:8085/api/v1/partner/profile/aggreement',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + props.userDetails.login_token,
+    //             'Content-Type': 'application/json'
+    //         },
+    //         data: JSON.stringify(terms_),
+    //     };
+
+    //     axios(config_)
+    //         .then(async function (res) {
+    //             res = res.data;
+    //             if (res.status === 'SUCCESS') {
+    //                 const data__ = '{\r\n    ""\r\n}';
+
+    //                 const config__ = {
+    //                     method: 'get',
+    //                     maxBodyLength: Infinity,
+    //                     url: 'http://18.234.206.45:8085/api/v1/partner/profile/submitProfile',
+    //                     headers: {
+    //                         'Authorization': 'Bearer ' + props.userDetails.login_token,
+    //                         'Content-Type': 'application/json'
+    //                     },
+    //                     data: data__
+    //                 };
+
+    //                 axios(config__)
+    //                     .then(function (res) {
+    //                         res = res.data;
+    //                         console.log(res);
+    //                         alert('Profile submitted successfully')
+    //                     })
+    //                     .catch(function (error) {
+    //                         alert('Fill ' + error.response.data.errors[0].field + 'Fields before submitting');
+    //                     });
+    //             };
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         })
+    // }
+
+    // const mobileNoValidation = (val) => {
+    //     let res = false;
+    //     if (val.split('').length === 10 && val.match(/^[789]\d{9}$/)) {
+    //         res = true;
+    //     };
+    //     return res;
+    // }
+
+    // const ifscCodeValidation = (val) => {
+    //     let res = false;
+    //     if(val.split('').length === 11) {
+    //         res = true;
+    //     };
+    //     return res;
+    // }
+
+    // const banckAccountNoValidation = (val) => {
+    //     if (val.match(/^[a-zA-Z ]*$/)) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
     const [file, setFile] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [navPage, setNavPage] = useState(null);
@@ -262,6 +348,7 @@ const Terms = () => {
                 </div>
             </div>
         </div>
+        {/* <button onClick={apiSubmit}>Click me</button> */}
     </div >);
 }
 

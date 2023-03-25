@@ -45,6 +45,7 @@ const EmailVerify = () => {
         progress: undefined,
         theme: "light",
       });
+      setFieldValue('otp', null);
     };
   }, [time]);
 
