@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BrowserRouter,
-  Navigate,
   Route,
   Routes,
-  useNavigate,
-  useLocation,
 } from 'react-router-dom';
 import {
   APP_CONSTANTS,
   ROUTER_URL_CONSTANT,
 } from './constants/routerUriConstants';
-import Home from './pages/home/Home';
 import Signin from './pages/authentication/Signin';
 import Signup from './pages/authentication/Signup';
 import MobileVerify from './pages/authentication/MobileVerify';
@@ -45,10 +41,10 @@ import ReportOrders from './pages/reports/ReportOrders';
 import ReportReturn from './pages/reports/ReportReturn';
 import ReviewsAndRatings from './pages/reports/ReviewsAndRatings';
 import CategoryWiseReviews from './pages/reports/CategoryWiseReviews';
-import CatalougueWrapper from './pages/catalogue/CatalougueWrapper';
 import CategoryUploads from './pages/catalogue/CategoryUploads';
 import SelectCategory from './pages/catalogue/SelectCategory';
 import AddCatalogueProduct from './pages/catalogue/AddCatalogueProduct';
+import AddBulkCatalogue from './pages/catalogue/AddBulkCatalogue';
 import ProductVitalInfo from './pages/catalogue/ProductVitalInfo';
 import CatalogPricing from './pages/catalogue/CatalogPricing';
 import CatalogueDescription from './pages/catalogue/CatalogueDescription';
@@ -70,12 +66,16 @@ import OnboardingVerified from './pages/onboarding/onboardingVerified';
 import ForgotPassword from './pages/authentication/ForgotPassword';
 import ResetPassword from './pages/authentication/ResetPassword';
 import ForgotPasswordOTP from './pages/authentication/ForgotPasswordOTP';
-import { decrypt, encrypt } from './crypto';
-import axios from 'axios';
+import { decrypt } from './crypto';
 import OTPSignin from './pages/authentication/OTPSignin';
 import OTPSigninSent from './pages/authentication/OTPSigninSend';
 import DeleteUser from './pages/deleteUser';
 import apiCall from './pages/onboarding/apiCall';
+import CreateBulkCatalog from './pages/catalogue/CreateBulkCatalog';
+import ViewQcStatus from './pages/catalogue/ViewQcStatus';
+import CorrectErrors from './pages/catalogue/CorrectErrors';
+import ViewSuccessfulListing from './pages/catalogue/ViewSuccessfulListing';
+import BulkCatalogueFileReport from './pages/catalogue/BulkCatalogueFileReport';
 
 function App() {
   const userData = getItem(APP_CONSTANTS.auth_token);
@@ -97,11 +97,22 @@ function App() {
     // }
 
     if (localStorage.getItem('userData')) {
-      const { emailVerified, phoneVerified } = JSON.parse(decrypt(localStorage.getItem('userData')));
+      const { emailVerified, phoneVerified } = JSON.parse(
+        decrypt(localStorage.getItem('userData'))
+      );
 
-      if (!emailVerified && !phoneVerified && path !== 'signin' && path !== 'signup' && path !== 'mobileotp' && path !== 'mobileverified' && path !== 'email-verify' && path !== 'email-verified') {
+      if (
+        !emailVerified &&
+        !phoneVerified &&
+        path !== 'signin' &&
+        path !== 'signup' &&
+        path !== 'mobileotp' &&
+        path !== 'mobileverified' &&
+        path !== 'email-verify' &&
+        path !== 'email-verified'
+      ) {
         window.location.assign('/mobileotp');
-      };
+      }
     }
 
     // if (!localStorage.getItem('userData') && path !== 'signin' && path !== 'signup' && path !== 'mobileotp' && path !== 'mobileverified' && path !== 'email-verify' && path !== 'email-verified') {
@@ -117,7 +128,7 @@ function App() {
     if (localStorage.getItem('userData') && localStorage.getItem('token')) {
       await apiCall();
       setApiCalled(1);
-    };
+    }
 
     // if (sessionStorage.getItem('profileData')) {
     //   setApiCalled(1);
@@ -130,7 +141,6 @@ function App() {
     });
 
     CallApi();
-
   }, []);
 
   return (
@@ -149,30 +159,15 @@ function App() {
             element={<MobileVerified />}
           />
           <Route
-            path='/forgot-password/otp/:username'
+            path="/forgot-password/otp/:username"
             element={<ForgotPasswordOTP />}
           />
-          <Route
-            path='/otp-signin/otp/:username'
-            element={<OTPSigninSent />}
-          />
-          <Route
-            path='/forgot-password'
-            element={<ForgotPassword />}
-          />
+          <Route path="/otp-signin/otp/:username" element={<OTPSigninSent />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          <Route
-            path='/delete-user'
-            element={<DeleteUser />}
-          />
-          <Route
-            path='/reset-password'
-            element={<ResetPassword />}
-          />
-          <Route
-            path='/otp-signin'
-            element={<OTPSignin />}
-          />
+          <Route path="/delete-user" element={<DeleteUser />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/otp-signin" element={<OTPSignin />} />
           <Route
             path={ROUTER_URL_CONSTANT.EMAILVERIFY}
             element={<EmailVerify />}
@@ -252,6 +247,31 @@ function App() {
                 element={<SelectCategory />}
               />
               <Route
+                path={ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_BULK}
+                element={<AddBulkCatalogue />}
+              >
+                <Route
+                  path={ROUTER_URL_CONSTANT.CREATE_CATALOGUE}
+                  element={<CreateBulkCatalog />}
+                />
+                <Route
+                  path={ROUTER_URL_CONSTANT.BULK_CATALOGUE_FILE_REPORT}
+                  element={<BulkCatalogueFileReport />}
+                />
+                <Route
+                  path={ROUTER_URL_CONSTANT.VIEW_QC_STATUS}
+                  element={<ViewQcStatus />}
+                />
+                <Route
+                  path={ROUTER_URL_CONSTANT.CORRECT_ERRORS}
+                  element={<CorrectErrors />}
+                />
+                <Route
+                  path={ROUTER_URL_CONSTANT.VIEW_SUCCESSFUL_LISTING}
+                  element={<ViewSuccessfulListing />}
+                />
+              </Route>
+              <Route
                 path={ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT}
                 element={<AddCatalogueProduct />}
               >
@@ -259,6 +279,7 @@ function App() {
                   path={ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_INFO}
                   element={<ProductVitalInfo />}
                 />
+
                 <Route
                   path={ROUTER_URL_CONSTANT.CATALOGUE_PRICING}
                   element={<CatalogPricing />}
@@ -360,11 +381,14 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
             </Route>
           </Route>
-          <Route path='/onboarding/details' element={<OnboardingDetails />} />
-          <Route path='/onboarding/bank-details' element={<OnboardingBankDetails />} />
-          <Route path='/onboarding/gstin' element={<GSTIN />} />
-          <Route path='/onboarding/terms' element={<Terms />} />
-          <Route path='/onboarding/verified' element={<OnboardingVerified />} />
+          <Route path="/onboarding/details" element={<OnboardingDetails />} />
+          <Route
+            path="/onboarding/bank-details"
+            element={<OnboardingBankDetails />}
+          />
+          <Route path="/onboarding/gstin" element={<GSTIN />} />
+          <Route path="/onboarding/terms" element={<Terms />} />
+          <Route path="/onboarding/verified" element={<OnboardingVerified />} />
         </Routes>
       </BrowserRouter>
     </>

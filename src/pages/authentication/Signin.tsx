@@ -5,7 +5,7 @@ import {
   messageIcon,
   signImage,
   show,
-  hide
+  hide,
 } from '../../constants/imageConstants';
 import AuthWrapper from './AuthWrapper';
 import { ROUTER_URL_CONSTANT } from '../../constants/routerUriConstants';
@@ -25,19 +25,28 @@ type Login = {
 };
 
 const schema = yup.object({
-  email: yup.string().required().test('email_or_phone', 'Enter valid Email ID or Phone Number', (value) => {
-    return validateEmail(value) || validatePhone(value);
-  }),
+  email: yup
+    .string()
+    .required()
+    .test('email_or_phone', 'Enter valid Email ID or Phone Number', (value) => {
+      return validateEmail(value) || validatePhone(value);
+    }),
   password: yup.string().required('Password can not be empty'),
-})
+});
 
 const validateEmail = (email) => {
   return yup.string().email().isValidSync(email);
 };
 
 const validatePhone = (phone) => {
-  return yup.string().required().matches(/^[789]\d{9}$/).min(10).max(10).isValidSync(phone);
-}
+  return yup
+    .string()
+    .required()
+    .matches(/^[789]\d{9}$/)
+    .min(10)
+    .max(10)
+    .isValidSync(phone);
+};
 
 const Signin = () => {
   const {
@@ -56,15 +65,17 @@ const Signin = () => {
   const navigate = useNavigate();
 
   const apiRequest = async (params) => {
-    const { data } = await api.post('/user/MP/noAuth/login', params)
+    const { data } = await api.post('/user/MP/noAuth/login', params);
     console.log(data);
     if (data.status === 'SUCCESS') {
+      console.log(data, 'data');
+
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: '/user/auth/getUserInfo',
         headers: {
-          'Authorization': 'Bearer ' + data.data.token,
+          Authorization: 'Bearer ' + data.data.token,
         },
       };
 
@@ -77,10 +88,16 @@ const Signin = () => {
 
       console.log(data);
 
-      axios.get('http://35.170.79.161:8080/api/user/noAuth/getUserInfo/' + userData.id)
-        .then(async res => {
+      axios
+        .get(
+          'http://52.90.60.5:8080/api/user/noAuth/getUserInfo/' + userData.id
+        )
+        .then(async (res) => {
           console.log(res.data.data);
-          localStorage.setItem('userData', encrypt(JSON.stringify(res.data.data)));
+          localStorage.setItem(
+            'userData',
+            encrypt(JSON.stringify(res.data.data))
+          );
           if (res.data.data.emailVerified && res.data.data.phoneVerified) {
             const { verificationStatus } = await apiCall();
             console.log(verificationStatus);
@@ -96,34 +113,32 @@ const Signin = () => {
           } else {
             navigate('/mobileotp');
           }
-        })
+        });
 
       // navigate('/onboarding/details');
-
     } else if (data.statusMessage === 'Invalid password to  login') {
       console.log(data);
 
       toast.error('Email or password is wrong', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: 'light',
       });
-    }
-    else {
+    } else {
       toast.error('Something went wrong', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: 'light',
       });
     }
   };
@@ -172,7 +187,9 @@ const Signin = () => {
                           {...register('email')}
                         />
                         {errors.email && (
-                          <p className="error" style={{ textAlign: 'left' }}>{errors.email.message}</p>
+                          <p className="error" style={{ textAlign: 'left' }}>
+                            {errors.email.message}
+                          </p>
                         )}
                       </div>
 
@@ -185,7 +202,17 @@ const Signin = () => {
                           {...register('password')}
                           style={{ paddingRight: 40 }}
                         />
-                        <img src={showPass ? hide : show} style={{ width: 25, height: 25, opacity: 0.2, cursor: 'pointer', left: 'auto', right: 5, top: 7 }}
+                        <img
+                          src={showPass ? hide : show}
+                          style={{
+                            width: 25,
+                            height: 25,
+                            opacity: 0.2,
+                            cursor: 'pointer',
+                            left: 'auto',
+                            right: 5,
+                            top: 7,
+                          }}
                           onClick={() => {
                             if (showPass) {
                               setShowPass(false);
@@ -195,7 +222,9 @@ const Signin = () => {
                           }}
                         />
                         {errors.password && (
-                          <p className="error" style={{ textAlign: 'left' }}>{errors.password.message}</p>
+                          <p className="error" style={{ textAlign: 'left' }}>
+                            {errors.password.message}
+                          </p>
                         )}
                       </div>
 
@@ -223,8 +252,13 @@ const Signin = () => {
                         </label>
                       </div>
                       <div className="col-md-12 frmss mb-3">
-                        <Link to='/otp-signin'>
-                          <label htmlFor="checkbox" style={{ color: '#ff6658', cursor: 'pointer' }}>Sign In with OTP</label>
+                        <Link to="/otp-signin">
+                          <label
+                            htmlFor="checkbox"
+                            style={{ color: '#ff6658', cursor: 'pointer' }}
+                          >
+                            Sign In with OTP
+                          </label>
                         </Link>
                       </div>
 

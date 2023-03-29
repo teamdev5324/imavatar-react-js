@@ -1,9 +1,62 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { ROUTER_URL_CONSTANT } from '../../constants/routerUriConstants';
-import CatalougueWrapper from './CatalougueWrapper';
+import {
+  catAndSubCategory,
+  getCatalogueCategory,
+  getCatalogueSubCategory,
+} from '../../services/catalogue/singleCatalouge';
+import { catalogueSelectors } from '../../store/catalogue';
+import { SystemState } from '../../store/storeTypes';
 
 const SelectCategory = () => {
+  const dispatch =
+    useDispatch<ThunkDispatch<SystemState, unknown, AnyAction>>();
+  const catalogueState = useSelector(catalogueSelectors.getCatalogueState);
+  const { categoryData } = catalogueState;
+  const { subcategoryData } = catalogueState;
+
+  const [categoryId, setCategoryId] = useState('');
+  const [subCategoryId, setSubCategoryId] = useState('');
+  const [category, setCategory] = useState('');
+  const [subCategory, setSubCategory] = useState('');
+
+  useEffect(() => {
+    dispatch(getCatalogueCategory());
+  }, []);
+
+  useEffect(() => {
+    if (categoryId !== '') {
+      dispatch(getCatalogueSubCategory(categoryId));
+    }
+  }, [categoryId]);
+
+  useEffect(() => {
+    if (subCategoryId !== '') {
+      const prepareData = {
+        category,
+        subCategory,
+        categoryId,
+        subCategoryId,
+      };
+      console.log(prepareData, 'prepareData');
+      dispatch(catAndSubCategory(prepareData));
+    }
+  }, [subCategoryId]);
+
+  const selectCategory = (e: any) => {
+    setCategoryId(e.target.value);
+    setCategory(e.target.options[e.target.selectedIndex].text);
+  };
+
+  const selectSubcategory = (e: any) => {
+    setSubCategoryId(e.target.value);
+    setSubCategory(e.target.options[e.target.selectedIndex].text);
+  };
+
   return (
     <div className="tab-content col-md-10 p-0" id="nav-tabContent">
       <div
@@ -48,9 +101,23 @@ const SelectCategory = () => {
                     Browse :{' '}
                   </label>
                   <div className="">
-                    <select name="service" id="cars" className="form-control">
+                    <select
+                      name="service"
+                      id="cars"
+                      className="form-control"
+                      onChange={selectCategory}
+                    >
                       <option value="">Select a Category</option>
-                      <option value="">Books </option>
+
+                      {categoryData.length > 0 &&
+                        categoryData.map((item: any, index: number) => {
+                          return (
+                            <option key={index} value={item.id}>
+                              {item?.title}
+                            </option>
+                          );
+                        })}
+                      {/*  <option value="">Books </option>
                       <option value="">Pooja Samagri </option>
                       <option value="">Gemstones </option>
                       <option value="">Yantras </option>
@@ -61,14 +128,28 @@ const SelectCategory = () => {
                       <option value="">Vastu </option>
                       <option value="">Rudraksha </option>
                       <option value="">Combinations </option>
-                      <option value="">Combinations </option>
+                      <option value="">Combinations </option> */}
                     </select>
                   </div>
 
                   <div className=" ml-3">
-                    <select name="service" id="cars" className="form-control">
+                    <select
+                      name="service"
+                      id="cars"
+                      className="form-control"
+                      onChange={selectSubcategory}
+                    >
                       <option value="">Sub Category</option>
-                      <option value="">1 Mukhi Rudraksha </option>
+
+                      {subcategoryData.length > 0 &&
+                        subcategoryData.map((item: any, index: number) => {
+                          return (
+                            <option key={index} value={item.id}>
+                              {item?.title}
+                            </option>
+                          );
+                        })}
+                      {/*    <option value="">1 Mukhi Rudraksha </option>
                       <option value="">2 Mukhi Rudraksha </option>
                       <option value="">3 Mukhi Rudraksha </option>
                       <option value="">4 Mukhi Rudraksha </option>
@@ -82,7 +163,7 @@ const SelectCategory = () => {
                       <option value="">12 Mukhi Rudraksha </option>
                       <option value="">13 Mukhi Rudraksha </option>
                       <option value="">14 Mukhi Rudraksha </option>
-                      <option value="">15 Mukhi Rudraksha </option>
+                      <option value="">15 Mukhi Rudraksha </option> */}
                     </select>
                   </div>
                   <Link
@@ -93,6 +174,9 @@ const SelectCategory = () => {
                       name=""
                       className="inventedit"
                       value="Continue"
+                      disabled={
+                        categoryId === '' || subCategoryId === '' ? true : false
+                      }
                     />
                   </Link>
                 </div>

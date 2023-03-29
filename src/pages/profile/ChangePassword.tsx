@@ -108,7 +108,7 @@ const ChangePassword = () => {
           var config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'http://35.170.79.161:8080/api/user/noAuth/userPwdChange',
+            url: 'http://52.90.60.5:8080/api/user/noAuth/userPwdChange',
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('token'),
               'Content-Type': 'application/json'

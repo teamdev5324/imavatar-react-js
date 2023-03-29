@@ -41,6 +41,12 @@ export const ROUTER_URL_CONSTANT = {
   // CATELOG ROUTE
   CATELOGS: 'catelogs',
   CATALOG_SELECT_CATEGORY: 'catlogcategory',
+  CATALOGUE_PRODUCT_BULK: 'catbulkproduct',
+  CREATE_CATALOGUE: 'createcatalogue',
+  VIEW_QC_STATUS: 'viewqcstatus',
+  CORRECT_ERRORS: 'correcterrors',
+  VIEW_SUCCESSFUL_LISTING: 'viewsuccessfullisting',
+  BULK_CATALOGUE_FILE_REPORT: 'bulkcataloguefilereport',
   CATALOGUE_PRODUCT: 'catproduct',
   CATALOGUE_PRODUCT_INFO: 'info',
   CATALOGUE_PRICING: 'pricing',

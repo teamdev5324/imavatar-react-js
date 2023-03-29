@@ -43,7 +43,10 @@ export const desableRatingIcon = require('../assets/img/stars2.png');
 export const infoIcon = require('../assets/img/Info.png');
 
 export const catalogueFds = require('../assets/img/cat-fds.png');
-export const active_bg_ = require('../assets/img/bg_active_.png')
-export const inactive_bg_ = require('../assets/img/bg_inactive_.png')
-export const show = require('../assets/img/show.png')
-export const hide = require('../assets/img/hide.png')
+export const active_bg_ = require('../assets/img/bg_active_.png');
+export const inactive_bg_ = require('../assets/img/bg_inactive_.png');
+export const show = require('../assets/img/show.png');
+export const hide = require('../assets/img/hide.png');
+export const cloud = require('../assets/img/cloud.png');
+export const cloudOpposite = require('../assets/img/cloud-opposite.png');
+export const cancelling = require('../assets/img/cancelling.png');

@@ -17,9 +17,18 @@ export const API_URL_CONSTANTS = {
 
   SAVEGSTAIN_DETAILS: `${PartnerService}/partner/profile/gst`,
 
+  GET_CATEGORY: `${PartnerService}/category`,
+
+  GET_PRODUC_QC: `${PartnerService}/partner/product/`,
+
+  SUBMIT_PRODUCT: `${PartnerService}/partner/product/singleUpload/save`,
+
   CHANGE_PASSWORD: `${UserService}/user/noAuth/userPwdChange`,
 
   ADD_USER: `${UserService}/user/noAuth/addPartnerUser`,
 
   WHATS_APP_INFO: `${PartnerService}/partner/profile/whatsappInfo`,
 };
+
+export const excelFileUrl =
+  'https://imavatar-dev.s3.amazonaws.com/LDMS0007.xlsx';

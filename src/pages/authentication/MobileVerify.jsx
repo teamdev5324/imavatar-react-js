@@ -39,15 +39,15 @@ const MobileVerify = () => {
 
   useEffect(() => {
     if (resentActive === 0) {
-      toast.warn("OTP has been expired", {
-        position: "top-right",
+      toast.warn('OTP has been expired', {
+        position: 'top-right',
         autoClose: 3500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: 'light',
       });
       setOtp(null);
     }
@@ -59,55 +59,69 @@ const MobileVerify = () => {
     const { id: uid, userCode: userName, phoneNumber } = userData;
     setUserId(uid);
     const params = {
-      partnerType: "admin",
+      partnerType: 'admin',
       userName: phoneNumber,
-      userType: "6",
+      userType: '6',
     };
 
-    api.post('http://35.170.79.161:8080/api/user/MP/noAuth/sendOTP/phoneVerification', params)
-      .then(res => {
+    api
+      .post(
+        'http://52.90.60.5:8080/api/user/MP/noAuth/sendOTP/phoneVerification',
+        params
+      )
+      .then((res) => {
         res = res.data;
         console.log(res);
         setResentActive(60);
         if (res.status === 'SUCCESS') {
           toast.success('OTP sent successfully', {
-            position: "top-right",
+            position: 'top-right',
             autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: "light",
+            theme: 'light',
           });
         } else {
-          toast.error("Can not sent OTP", {
-            position: "top-right",
+          toast.error('Can not sent OTP', {
+            position: 'top-right',
             autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: "light",
+            theme: 'light',
           });
           console.log(res);
         }
-      })
-  }
+      });
+  };
 
   useEffect(() => {
     if (localStorage.getItem('userData')) {
       sendOtp();
-      const num = JSON.parse(decrypt(localStorage.getItem('userData'))).phoneNumber.split('');
-      setMyNumber('*******' + num[7] + num[8] + num[9])
+      const num = JSON.parse(
+        decrypt(localStorage.getItem('userData'))
+      ).phoneNumber.split('');
+      setMyNumber('*******' + num[7] + num[8] + num[9]);
     } else {
       window.location.assign('/signin');
     }
   }, []);
 
   const styles = {
-    cover: { width: '100%', height: '100vh', backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, zIndex: 99 },
+    cover: {
+      width: '100%',
+      height: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 99,
+    },
     form: {
       width: 400,
       maxWidth: '100%',
@@ -120,119 +134,134 @@ const MobileVerify = () => {
       height: 300,
       display: 'flex',
       flexDirection: 'column',
-      marginHorizontal: 200
-    }
-  }
+      marginHorizontal: 200,
+    },
+  };
 
   return (
     <>
       {change && (
         <>
           <div style={styles.cover} onClick={() => setChange(false)}></div>
-          <form className='change-form' onSubmit={async e => {
-            e.preventDefault();
+          <form
+            className="change-form"
+            onSubmit={async (e) => {
+              e.preventDefault();
 
-            if (newMobileNumber.split('').length === 10 && newMobileNumber.match(/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/)) {
+              if (
+                newMobileNumber.split('').length === 10 &&
+                newMobileNumber.match(
+                  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+                )
+              ) {
+                const res__ = await axios.get(
+                  'http://52.90.60.5:8080/api/user/MP/noAuth/userExists/' +
+                    newMobileNumber
+                );
 
-              const res__ = await axios.get('http://35.170.79.161:8080/api/user/MP/noAuth/userExists/' + newMobileNumber)
+                console.log(res__.data.status);
 
-              console.log(res__.data.status);
+                if (res__.data.status === 'SUCCESS') {
+                  toast.error('User already exists with this mobile number', {
+                    position: 'top-right',
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  });
+                } else {
+                  const data = JSON.stringify({
+                    // "email": newMobileNumber,
+                    phoneNumber: newMobileNumber,
+                    user_id: JSON.parse(
+                      decrypt(localStorage.getItem('userData'))
+                    ).id,
+                  });
 
-              if (res__.data.status === 'SUCCESS') {
-                toast.error('User already exists with this mobile number', {
-                  position: "top-right",
+                  const config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'http://52.90.60.5:8080/api/user/v2/noAuth/updateUser',
+                    headers: {
+                      Authorization: 'Bearer ' + localStorage.getItem('token'),
+                      'Content-Type': 'application/json',
+                    },
+                    data: data,
+                  };
+
+                  axios(config)
+                    .then(function (res) {
+                      res = res.data;
+                      if (res) {
+                        toast.success('Mobile number changed successfully', {
+                          position: 'top-right',
+                          autoClose: 1500,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: 'light',
+                        });
+                        setChange(false);
+                        sendOtp();
+                      } else {
+                        toast.error('Something went wrong', {
+                          position: 'top-right',
+                          autoClose: 1500,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: 'light',
+                        });
+                      }
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      toast.error('Something went wrong', {
+                        position: 'top-right',
+                        autoClose: 1500,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'light',
+                      });
+                    });
+                }
+              } else {
+                toast.error('Enter valid mobile number', {
+                  position: 'top-right',
                   autoClose: 1500,
                   hideProgressBar: false,
                   closeOnClick: true,
                   pauseOnHover: true,
                   draggable: true,
                   progress: undefined,
-                  theme: "light",
+                  theme: 'light',
                 });
-              } else {
-                const data = JSON.stringify({
-                  // "email": newMobileNumber,
-                  "phoneNumber": newMobileNumber,
-                  "user_id": JSON.parse(decrypt(localStorage.getItem('userData'))).id,
-                });
-
-                const config = {
-                  method: 'post',
-                  maxBodyLength: Infinity,
-                  url: 'http://35.170.79.161:8080/api/user/v2/noAuth/updateUser',
-                  headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'application/json'
-                  },
-                  data: data
-                };
-
-                axios(config)
-                  .then(function (res) {
-                    res = res.data;
-                    if (res) {
-                      toast.success('Mobile number changed successfully', {
-                        position: "top-right",
-                        autoClose: 1500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                      });
-                      setChange(false);
-                      sendOtp();
-                    } else {
-                      toast.error('Something went wrong', {
-                        position: "top-right",
-                        autoClose: 1500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                      });
-                    }
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                    toast.error('Something went wrong', {
-                      position: "top-right",
-                      autoClose: 1500,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "light",
-                    });
-                  });
               }
-
-            } else {
-              toast.error('Enter valid mobile number', {
-                position: "top-right",
-                autoClose: 1500,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
-            }
-          }}>
+            }}
+          >
             <span>New Mobile Number</span>
-            <input type='number' placeholder='Your new mobile number' className='form-control' required
-              onChange={text => {
+            <input
+              type="number"
+              placeholder="Your new mobile number"
+              className="form-control"
+              required
+              onChange={(text) => {
                 text = text.currentTarget.value;
                 setNewMobileNumber(text);
               }}
               value={newMobileNumber}
             />
-            <input type='submit' className='edit' />
+            <input type="submit" className="edit" />
           </form>
         </>
       )}
@@ -261,53 +290,71 @@ const MobileVerify = () => {
               <div className="login-left lts">
                 <h2>Mobile Number Verification</h2>
                 <p>
-                  OTP sent to +91 {myNumber} <a onClick={() => setChange(true)}>Change</a>
+                  OTP sent to +91 {myNumber}{' '}
+                  <a onClick={() => setChange(true)}>Change</a>
                 </p>
                 <div className="welcome-form">
                   <form
                     onSubmit={async (e) => {
                       e.preventDefault();
                       // dispatch(partnerMobileVerify(otp, navigate));
-                      const { data } = await api.get(`/user/userVerification/phone/${otp}/${userId}`);
+                      const { data } = await api.get(
+                        `/user/userVerification/phone/${otp}/${userId}`
+                      );
                       console.log(data);
                       if (data.statusCode == 200) {
                         // alert('OTP verified successfully');
-                        axios.get('http://35.170.79.161:8080/api/user/noAuth/getUserInfo/' + JSON.parse(decrypt(localStorage.getItem('userData'))).id)
-                          .then(async res => {
-                            localStorage.setItem('userData', encrypt(JSON.stringify(res.data.data)));
+                        axios
+                          .get(
+                            'http://52.90.60.5:8080/api/user/noAuth/getUserInfo/' +
+                              JSON.parse(
+                                decrypt(localStorage.getItem('userData'))
+                              ).id
+                          )
+                          .then(async (res) => {
+                            localStorage.setItem(
+                              'userData',
+                              encrypt(JSON.stringify(res.data.data))
+                            );
                             const data = JSON.stringify({
-                              "phoneVerified": true,
-                              "user_id": JSON.parse(decrypt(localStorage.getItem('userData'))).id,
+                              phoneVerified: true,
+                              user_id: JSON.parse(
+                                decrypt(localStorage.getItem('userData'))
+                              ).id,
                             });
 
                             const config = {
                               method: 'post',
                               maxBodyLength: Infinity,
-                              url: 'http://35.170.79.161:8080/api/user/v2/noAuth/updateUser',
+                              url: 'http://52.90.60.5:8080/api/user/v2/noAuth/updateUser',
                               headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                                'Content-Type': 'application/json'
+                                Authorization:
+                                  'Bearer ' + localStorage.getItem('token'),
+                                'Content-Type': 'application/json',
                               },
-                              data: data
+                              data: data,
                             };
 
                             let res_ = await axios(config);
                             res_ = res_.data;
                             console.log(res_);
-                            localStorage.setItem('userData', encrypt(JSON.stringify(res_)));
+                            localStorage.setItem(
+                              'userData',
+                              encrypt(JSON.stringify(res_))
+                            );
 
                             navigate('/mobileverified');
-                          })
+                          });
                       } else {
                         toast.error(data.statusMessage, {
-                          position: "top-right",
+                          position: 'top-right',
                           autoClose: 1500,
                           hideProgressBar: false,
                           closeOnClick: true,
                           pauseOnHover: true,
                           draggable: true,
                           progress: undefined,
-                          theme: "light",
+                          theme: 'light',
                         });
                       }
                     }}
@@ -329,7 +376,13 @@ const MobileVerify = () => {
                     {resentActive && resentActive !== 0 ? (
                       <div className="col-md-12 frmss mb-2">
                         <label htmlFor="checkbox">
-                          Code expires in {resentActive === 60 ? ('01:00') : ('00:' + (resentActive < 10 ? '0' + resentActive : resentActive))}
+                          Code expires in{' '}
+                          {resentActive === 60
+                            ? '01:00'
+                            : '00:' +
+                              (resentActive < 10
+                                ? '0' + resentActive
+                                : resentActive)}
                         </label>
                       </div>
                     ) : null}

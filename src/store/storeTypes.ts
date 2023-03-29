@@ -58,4 +58,12 @@ export interface SystemState {
     };
     aggreements: [];
   };
+  catalogue: {
+    categoryData: [];
+    subcategoryData: [];
+    catAndSubcategory: {};
+    getAllProduct: [];
+    getAllProductInfo: {};
+    error: any;
+  };
 }

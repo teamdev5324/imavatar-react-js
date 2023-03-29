@@ -1,10 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { catalogueFds } from '../../constants/imageConstants';
 import { ROUTER_URL_CONSTANT } from '../../constants/routerUriConstants';
+import { getAllCatalogueProduct } from '../../services/catalogue/singleCatalouge';
+import { catalogueSelectors } from '../../store/catalogue';
+import { SystemState } from '../../store/storeTypes';
 import CatalougueWrapper from './CatalougueWrapper';
 
 const CategoryUploads = () => {
+  const dispatch =
+    useDispatch<ThunkDispatch<SystemState, unknown, AnyAction>>();
+
+  const catalogueState = useSelector(catalogueSelectors.getCatalogueState);
+  const { getAllProduct } = catalogueState;
+  console.log(getAllProduct, 'catalogueState');
+
+  const [bulk, setBulk] = useState([]);
+  const [single, setSingle] = useState([]);
+
+  useEffect(() => {
+    dispatch(getAllCatalogueProduct());
+  }, []);
+
+  useEffect(() => {
+    if (getAllProduct.length > 0) {
+      let bulkUpload = getAllProduct.filter(
+        (item: any) => item?.uploadType === 'BULK'
+      );
+      let singleUpload = getAllProduct.filter(
+        (item: any) => item?.uploadType === 'SINGLE'
+      );
+      setBulk(bulkUpload);
+      setSingle(singleUpload);
+    }
+  }, [getAllProduct]);
+
+  console.log(bulk, 'bulk');
+  console.log(single, 'single');
+
   enum tabs {
     a = 'Single',
     b = 'Bulk',
@@ -38,17 +76,15 @@ const CategoryUploads = () => {
           <div className="catlog-btn">
             <p>
               <Link to={`/${ROUTER_URL_CONSTANT.CATALOG_SELECT_CATEGORY}`}>
-                {' '}
-                Add Single Catalog{' '}
+                Add Single Catalog
                 <i className="fa fa-info-circle" aria-hidden="true"></i>
-              </Link>{' '}
+              </Link>
             </p>
             <p>
               <a href="" className="ml-3">
-                {' '}
-                Add Bulk Catalog{' '}
+                Add Bulk Catalog
                 <i className="fa fa-info-circle" aria-hidden="true"></i>
-              </a>{' '}
+              </a>
             </p>
           </div>
         </div>
@@ -58,11 +94,12 @@ const CategoryUploads = () => {
           </label>
           <div className="catlog-btn">
             <p>
-              <a href="">
-                {' '}
-                Create Bundled Kits{' '}
+              <NavLink to={`/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_BULK}/${ROUTER_URL_CONSTANT.CREATE_CATALOGUE}`}>
+                {/* <a href=""> */}
+                Create Bundled Kits
                 <i className="fa fa-info-circle" aria-hidden="true"></i>
-              </a>{' '}
+                {/* </a> */}
+              </NavLink>
             </p>
           </div>
         </div>
@@ -72,15 +109,15 @@ const CategoryUploads = () => {
       <div className="payment-block">
         <div className="payment-block-content">
           <h5>Total uploads done </h5>
-          <h6>3</h6>
+          <h6>{getAllProduct.length}</h6>
         </div>
         <div className="payment-block-content">
           <h5>Using Single uploads </h5>
-          <h6>1 </h6>
+          <h6>{single.length} </h6>
         </div>
         <div className="payment-block-content">
           <h5>Using Bulk uploads </h5>
-          <h6>1 </h6>
+          <h6>{bulk.length} </h6>
         </div>
         <div className="payment-block-content">
           <h5>Using Bundled Kits</h5>
@@ -127,26 +164,85 @@ const CategoryUploads = () => {
             <th>QC Status (↑) </th>
             <th>Actions </th>
           </tr>
-
-          {new Array(5).fill('_').map((_, i) => {
-            return (
-              <tr>
-                <td>{i + 1} </td>
-                <td>
-                  {' '}
-                  {new Array(i < 5 ? i + 1 : 3).fill('_').map(() => (
-                    <img src={catalogueFds} className="img-fluid" />
-                  ))}
-                </td>
-                <td>Rudraksha </td>
-                <td>1234 </td>
-                <td>31 July 2022 | 4.30 PM </td>
-                <td>1 </td>
-                <td>In Progress </td>
-                <td className="orgerns">Edit </td>
-              </tr>
-            );
-          })}
+          {curTab === tabs.a ? (
+            <>
+              {bulk.map((item: any, i) => {
+                return (
+                  <tr>
+                    <td>{i + 1} </td>
+                    <td>
+                      {' '}
+                      {new Array(i < 5 ? i + 1 : 3).fill('_').map(() => (
+                        <img src={catalogueFds} className="img-fluid" />
+                      ))}
+                    </td>
+                    <td>{item?.category} </td>
+                    <td>{item?.fileId} </td>
+                    <td>{item?.updatedDate} </td>
+                    <td>{item?.puid} </td>
+                    <td>
+                      {item?.qcstatus === 'PENDING'
+                        ? 'In Progress'
+                        : item?.qcstatus === 'DRAFT'
+                          ? 'Draft'
+                          : 'Done'}{' '}
+                    </td>
+                    <td className="orgerns">Edit </td>
+                  </tr>
+                );
+              })}
+            </>
+          ) : curTab === tabs.b ? (
+            <>
+              {single.map((item: any, i) => {
+                return (
+                  <tr>
+                    <td>{i + 1} </td>
+                    <td>
+                      {' '}
+                      {new Array(i < 5 ? i + 1 : 3).fill('_').map(() => (
+                        <img src={catalogueFds} className="img-fluid" />
+                      ))}
+                    </td>
+                    <td>{item?.category} </td>
+                    <td>{item?.fileId} </td>
+                    <td>{item?.updatedDate} </td>
+                    <td>{item?.puid} </td>
+                    <td>
+                      {item?.qcstatus === 'PENDING'
+                        ? 'In Progress'
+                        : item?.qcstatus === 'DRAFT'
+                          ? 'Draft'
+                          : 'Done'}{' '}
+                    </td>
+                    <td className="orgerns">Edit </td>
+                  </tr>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {new Array(5).fill('_').map((_, i) => {
+                return (
+                  <tr>
+                    <td>{i + 1} </td>
+                    <td>
+                      {' '}
+                      {new Array(i < 5 ? i + 1 : 3).fill('_').map(() => (
+                        <img src={catalogueFds} className="img-fluid" />
+                      ))}
+                    </td>
+                    <td>Rudraksha </td>
+                    <td>1234 </td>
+                    <td>31 July 2022 | 4.30 PM </td>
+                    <td>1 </td>
+                    <td>In Progress </td>
+                    <td className="orgerns">Edit </td>
+                  </tr>
+                );
+              })}
+            </>
+          )}
         </tbody>
       </table>
 

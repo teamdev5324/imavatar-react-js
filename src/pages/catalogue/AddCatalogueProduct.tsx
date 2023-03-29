@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
@@ -20,7 +19,9 @@ const AddCatalogueProduct = () => {
         <div className="orng-head oddrflx">
           <p>Catalog uploads {`>`} Add single catalog</p>
           <p>
-            <Link to={`/${ROUTER_URL_CONSTANT.CATALOG_SELECT_CATEGORY}`}>
+            <Link
+              to={`/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT}/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_INFO}`}
+            >
               Select category
             </Link>
 

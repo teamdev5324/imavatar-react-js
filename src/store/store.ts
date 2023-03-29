@@ -12,12 +12,14 @@ import thunk from 'redux-thunk';
 import signupReducer from './auth/signup/reducer';
 import { signinReducer } from './auth/signin';
 import { profileReducer } from './profile';
+import { catalogueReducer } from './catalogue';
 
 const appReducer = combineReducers({
   counter: counterReducer,
   signup: signupReducer,
   signin: signinReducer,
   profile: profileReducer,
+  catalogue: catalogueReducer,
 });
 
 const allStoreEhancers: StoreEnhancer = compose(

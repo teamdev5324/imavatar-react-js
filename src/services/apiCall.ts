@@ -28,6 +28,7 @@ export function getReqParamToken(url: string) {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${getItem(APP_CONSTANTS.auth_token)}`,
   };
+
   return axios({
     method: 'get',
     url,
