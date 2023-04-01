@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { ROUTER_URL_CONSTANT } from '../../constants/routerUriConstants';
@@ -57,6 +57,8 @@ const SelectCategory = () => {
     setSubCategory(e.target.options[e.target.selectedIndex].text);
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="tab-content col-md-10 p-0" id="nav-tabContent">
       <div
@@ -107,7 +109,7 @@ const SelectCategory = () => {
                       className="form-control"
                       onChange={selectCategory}
                     >
-                      <option value="">Select a Category</option>
+                      <option disabled>Select a Category</option>
 
                       {categoryData.length > 0 &&
                         categoryData.map((item: any, index: number) => {
@@ -139,46 +141,31 @@ const SelectCategory = () => {
                       className="form-control"
                       onChange={selectSubcategory}
                     >
-                      <option value="">Sub Category</option>
+                      <option disabled>Sub Category</option>
 
                       {subcategoryData.length > 0 &&
                         subcategoryData.map((item: any, index: number) => {
                           return (
-                            <option key={index} value={item.id}>
+                            <option key={index}>
                               {item?.title}
                             </option>
                           );
                         })}
-                      {/*    <option value="">1 Mukhi Rudraksha </option>
-                      <option value="">2 Mukhi Rudraksha </option>
-                      <option value="">3 Mukhi Rudraksha </option>
-                      <option value="">4 Mukhi Rudraksha </option>
-                      <option value="">5 Mukhi Rudraksha </option>
-                      <option value="">6 Mukhi Rudraksha </option>
-                      <option value="">7 Mukhi Rudraksha </option>
-                      <option value="">8 Mukhi Rudraksha </option>
-                      <option value="">9 Mukhi Rudraksha </option>
-                      <option value="">10 Mukhi Rudraksha </option>
-                      <option value="">11 Mukhi Rudraksha </option>
-                      <option value="">12 Mukhi Rudraksha </option>
-                      <option value="">13 Mukhi Rudraksha </option>
-                      <option value="">14 Mukhi Rudraksha </option>
-                      <option value="">15 Mukhi Rudraksha </option> */}
                     </select>
                   </div>
-                  <Link
-                    to={`/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT}/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_INFO}`}
-                  >
-                    <input
-                      type="button"
-                      name=""
-                      className="inventedit"
-                      value="Continue"
-                      disabled={
-                        categoryId === '' || subCategoryId === '' ? true : false
+                  <input
+                    type="button"
+                    name=""
+                    className="inventedit"
+                    value="Continue"
+                    onClick={() => {
+                      if (categoryId === '' || subCategoryId === '') { alert('Please select category and sub category') }
+                      else {
+                        localStorage.setItem('cat', JSON.stringify({ cat: category, subCat: subCategory, }))
+                        navigate(`/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT}/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_INFO}`)
                       }
-                    />
-                  </Link>
+                    }}
+                  />
                 </div>
               </div>
               <div className="deletes-right paymeeditbtn"></div>

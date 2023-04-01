@@ -1,8 +1,16 @@
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, Outlet } from 'react-router-dom';
 import { ROUTER_URL_CONSTANT } from '../../constants/routerUriConstants';
 
 const AddBulkCatalogue = () => {
     const location = useLocation();
+    const [data, setData] = useState(null);
+    const [cat, setCat] = useState(null);
+
+    useEffect(() => {
+        setData(JSON.parse(localStorage.getItem('bulkFileData')));
+        setCat(JSON.parse(localStorage.getItem('cat')));
+    }, []);
 
     return (
         <div className="tab-content col-md-10 p-0" id="nav-tabContent">
@@ -28,7 +36,7 @@ const AddBulkCatalogue = () => {
                 </div>
                 <div className="col-md-12 whtbox">
                     <div className="panel-box ">
-                        <h4 className="cathed pt-4">Rudraksha {`>`} 9 Mukhi Rudraksha</h4>
+                        {cat && <h4 className="cathed pt-4">{cat.cat} {`>`} {cat.subCat}</h4>}
                         <div className="payment-success mt-2 mb-4">
                             <div className="payment-success-content">
                                 <NavLink to={ROUTER_URL_CONSTANT.CREATE_CATALOGUE}>
@@ -48,7 +56,7 @@ const AddBulkCatalogue = () => {
                                 <NavLink to={ROUTER_URL_CONSTANT.VIEW_QC_STATUS}>
                                     <h6
                                         className={
-                                            location.pathname.includes('catbulkproduct/viewqcstatus') || location.pathname.includes('catbulkproduct/correcterrors')
+                                            location.pathname.includes('catbulkproduct/viewqcstatus/:id') || location.pathname.includes('catbulkproduct/correcterrors')
                                                 ? 'active'
                                                 : ''
                                         }

@@ -23,23 +23,21 @@ const CatalogueTextInputField: React.FC<Props> = ({
 }) => {
 
     return (
-        <div style={{ width: '105%' }}>
-            <input
-                type={type}
-                className="form-control"
-                name={name}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                onBlur={onBlur}
-                onFocus={onFocus}
-            />
-            {error &&
-                <div className='error' style={{ paddingTop: 20, }}>{error}</div>
-            }
-        </div>
-
-
+        <>
+            <div style={{ width: '105%' }}>
+                <input
+                    type={type}
+                    className="form-control"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    onBlur={onBlur}
+                    onFocus={onFocus}
+                />
+                <div className='error' style={{ paddingTop: 20, }}>{error ? error : ''}</div>
+            </div>
+        </>
     );
 };
 

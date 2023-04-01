@@ -293,7 +293,7 @@ input#checkbox {
   margin: 0 auto;
 }
 
-.resend {}
+/* .resend {} */
 
 .resend a {
   color: #182d4a !important;
@@ -2413,4 +2413,54 @@ input.imabtn {
 
 .onboarding.terms .popup input[type=checkbox] {
   accent-color: #FF6658;
+}
+
+.product-info_ .error {
+  height: 20px !important;
+  width: 100% !important;
+  margin-bottom: -5px !important;
+  margin-top: -15px !important;
+}
+
+.product-info_ input {
+  margin-top: 15px;
+}
+
+.product-info_ label {
+  margin-top: 25px;
+}
+
+.product-info_ select {
+  margin-top: 25px !important;
+}
+
+.product-info_ i {
+  margin-right: 10px;
+}
+
+.images__ {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.images__ img {
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #000;
+  border-radius: 6px;
+  margin: 0 50px;
+}
+
+.catlgs-upload {
+  width: 68%;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 18px !important;
+}
+
+.cathed1 {
+  font-size: 13px;
 }

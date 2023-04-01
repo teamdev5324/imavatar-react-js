@@ -25,6 +25,8 @@
     "file-saver": "^2.0.5",
     "formik": "^2.2.9",
     "harsh-uid": "^1.3.0",
+    "lodash.groupby": "^4.6.0",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-custom-checkbox": "^3.1.5",

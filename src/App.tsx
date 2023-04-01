@@ -76,9 +76,15 @@ import ViewQcStatus from './pages/catalogue/ViewQcStatus';
 import CorrectErrors from './pages/catalogue/CorrectErrors';
 import ViewSuccessfulListing from './pages/catalogue/ViewSuccessfulListing';
 import BulkCatalogueFileReport from './pages/catalogue/BulkCatalogueFileReport';
+import axios from 'axios';
+import BulkCat from './pages/catalogue/bulkCat';
 
 function App() {
   const userData = getItem(APP_CONSTANTS.auth_token);
+
+  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
+
   const [apiCalled, setApiCalled] = useState(0);
   // const navigate = useNavigate();
   // const location = useLocation();
@@ -243,6 +249,10 @@ function App() {
                 element={<CategoryUploads />}
               />
               <Route
+                path='bulk-cat'
+                element={<BulkCat />}
+              />
+              <Route
                 path={ROUTER_URL_CONSTANT.CATALOG_SELECT_CATEGORY}
                 element={<SelectCategory />}
               />
@@ -263,7 +273,7 @@ function App() {
                   element={<ViewQcStatus />}
                 />
                 <Route
-                  path={ROUTER_URL_CONSTANT.CORRECT_ERRORS}
+                  path={ROUTER_URL_CONSTANT.CORRECT_ERRORS + '/:id'}
                   element={<CorrectErrors />}
                 />
                 <Route
@@ -275,6 +285,11 @@ function App() {
                 path={ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT}
                 element={<AddCatalogueProduct />}
               >
+                {/* <Route
+                  path={ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_INFO + '/:cat/:subcat'}
+                  element={<ProductVitalInfo />}
+                /> */}
+
                 <Route
                   path={ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_INFO}
                   element={<ProductVitalInfo />}

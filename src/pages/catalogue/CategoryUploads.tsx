@@ -81,10 +81,10 @@ const CategoryUploads = () => {
               </Link>
             </p>
             <p>
-              <a href="" className="ml-3">
+              <Link to='/bulk-cat' className="ml-3">
                 Add Bulk Catalog
                 <i className="fa fa-info-circle" aria-hidden="true"></i>
-              </a>
+              </Link>
             </p>
           </div>
         </div>
@@ -94,12 +94,12 @@ const CategoryUploads = () => {
           </label>
           <div className="catlog-btn">
             <p>
-              <NavLink to={`/${ROUTER_URL_CONSTANT.CATALOGUE_PRODUCT_BULK}/${ROUTER_URL_CONSTANT.CREATE_CATALOGUE}`}>
+              <a>
                 {/* <a href=""> */}
                 Create Bundled Kits
                 <i className="fa fa-info-circle" aria-hidden="true"></i>
                 {/* </a> */}
-              </NavLink>
+              </a>
             </p>
           </div>
         </div>

@@ -218,7 +218,7 @@ const GSTIN = () => {
         </div>
         <div className="form_">
             <div className='top-text col-12'>
-                <p>Share your personal bank account information with us.</p>
+                <p>Share your GSTIN information with us for tax compliance.</p>
             </div>
             <div className="form col-md-12 row">
                 <div className="col-md-6 frmses form-group row">

@@ -1,8 +1,8 @@
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import * as Yup from 'yup';
@@ -10,19 +10,21 @@ import CatalogueTextInputField from '../../components/catalogueInputField';
 import { submitProducts } from '../../services/catalogue/singleCatalouge';
 import { catalogueSelectors } from '../../store/catalogue';
 import { SystemState } from '../../store/storeTypes';
+import axios from 'axios';
 
 const ProductVitalInfo = () => {
-  const dispatch =
-    useDispatch<ThunkDispatch<SystemState, unknown, AnyAction>>();
-  const catalogueState = useSelector(catalogueSelectors.getCatalogueState);
+  // const dispatch =
+  // useDispatch < ThunkDispatch < SystemState, unknown, AnyAction>> ();
+  // const catalogueState = useSelector(catalogueSelectors.getCatalogueState);
 
-  const { catAndSubcategory }: any = catalogueState;
+  // const { catAndSubcategory } = catalogueState;
 
   const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(catalogueState, 'catalogueState');
-  }, []);
+  // useEffect(() => {
+  //   console.log(catalogueState, 'catalogueState');
+  // }, []);
 
   const productVistalInfo = Yup.object().shape({
     productName: Yup.string()
@@ -61,13 +63,16 @@ const ProductVitalInfo = () => {
     unitOfMeasurementOne: Yup.string().required(
       'Unit of measurement one is required'
     ),
-    UnitOfMeasurementTwo: Yup.string().required(
+    unitOfMeasurementTwo: Yup.string().required(
       'Unit of measurement two is required'
     ),
+    // unitOfMeasurementTwo: Yup.string().required(
+    //   'Unit of measurement two is required'
+    // ),
     productIdType: Yup.string().required('Product id type is required'),
   });
 
-  const { handleChange, handleSubmit, values, errors, touched, handleBlur } = useFormik({
+  const { handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue } = useFormik({
     // enableReinitialize: true,
     initialValues: {
       productName: '',
@@ -89,46 +94,70 @@ const ProductVitalInfo = () => {
       shape: '',
       materialType: '',
       unitOfMeasurementOne: '',
-      UnitOfMeasurementTwo: '',
+      unitOfMeasurementTwo: '55',
     },
     validationSchema: productVistalInfo,
-    onSubmit: (values) => {
-      const prepareData = JSON.stringify({
-        category: catAndSubcategory.category,
+    onSubmit: async (values) => {
+      let data_ = JSON.stringify({
+        "fileName": certificate.fileName,
+        "usecaseName": "certificateUpload",
+        "fileContent": certificate.base64,
+      });
+
+      let config_ = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://18.234.206.45:8085/api/v1/files/upload',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        },
+        data: data_
+      };
+
+      let fileRes = await axios(config_);
+
+      fileRes = fileRes.data.results.documentId;
+
+      console.log(fileRes);
+
+      const prepareData = {
+        category: JSON.parse(localStorage.getItem('cat')).cat,
+        subCategory: JSON.parse(localStorage.getItem('cat')).subCat,
         // pid: 2,
-        description: {
-          briefDescription: 'string',
-          formOfProduct: 'Solid',
-          fragile: 'Yes',
-          highLights: 'string',
-          keyWords: 'string',
-          otherInformation: 'string',
-          packagingHeight: '1.99',
-          packagingLength: '1.99',
-          packagingWidth: '1.99',
-          perisableExpirable: 'Yes',
-          relatedDeities: 'string',
-          relatedFaith: 'string',
-          relatedFestival: 'string',
-          replacementAvailable: 'Yes',
-          returnAvailable: 'No',
-          shelfLife: 'string',
-          unitOfPackaging: 'cm',
-        },
-        images: {
-          documentId1: 'DDMS0018',
-          documentId2: null,
-          documentId3: null,
-          documentId4: null,
-        },
+        // description: {
+        //   briefDescription: 'string',
+        //   formOfProduct: 'Solid',
+        //   fragile: 'Yes',
+        //   highLights: 'string',
+        //   keyWords: 'string',
+        //   otherInformation: 'string',
+        //   packagingHeight: '1.99',
+        //   packagingLength: '1.99',
+        //   packagingWidth: '1.99',
+        //   perisableExpirable: 'Yes',
+        //   relatedDeities: 'string',
+        //   relatedFaith: 'string',
+        //   relatedFestival: 'string',
+        //   replacementAvailable: 'Yes',
+        //   returnAvailable: 'No',
+        //   shelfLife: 'string',
+        //   unitOfPackaging: 'cm',
+        // },
+        // images: {
+        //   documentId1: 'DDMS0018',
+        //   documentId2: null,
+        //   documentId3: null,
+        //   documentId4: null,
+        // },
         info: {
           brandName: values.brandName,
-          cirtificates: values.Certificate,
+          cirtificates: fileRes,
           color: values.Colour,
           countryOfOrigin: values.CountryOfOrigin,
           includedItem: values.IncludedItems,
           lenghtOfProduct: '1.99',
-          heightOfProduct: values.UnitOfMeasurementTwo,
+          heightOfProduct: 66,
           materialType: values.materialType,
           onHandQuantity: values.onHandQuantity,
           productId: values.productID,
@@ -141,38 +170,92 @@ const ProductVitalInfo = () => {
           stockStatus: values.stockStatus,
           taxClass: values.TaxClass,
           unitOfMeasurementDimension: values.unitOfMeasurementOne,
-          unitOfMeasurementWeight: values.UnitOfMeasurementTwo,
+          unitOfMeasurementWeight: 88,
           weightOfProduct: values.weightOfProduct,
-          widthOfProduct: values.unitOfMeasurementOne,
+          widthOfProduct: values.unitOfMeasurementTwo,
         },
 
-        pricing: {
-          hsncode: '1234',
-          mrp: '1.99',
-          onHandUnitCost: '1.99',
-          partnerSKUId: 'string',
-          yourSellingPrice: '1.99',
+        // pricing: {
+        //   hsncode: '1234',
+        //   mrp: '1.99',
+        //   onHandUnitCost: '1.99',
+        //   partnerSKUId: 'string',
+        //   yourSellingPrice: '1.99',
+        // },
+        // variation: {
+        //   color: 'string',
+        //   height: '1.99',
+        //   length: '1.99',
+        //   materialType: 'string',
+        //   shape: 'string',
+        //   size: 'string',
+        //   unitQuantity: '1.55',
+        //   width: '1.99',
+        // },
+      };
+      console.log(prepareData);
+      // dispatch(submitProducts(prepareData));
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://18.234.206.45:8085/api/v1/partner/product/singleUpload/save',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          'Content-Type': 'application/json'
         },
+        data: prepareData
+      };
 
-        subCategory: catAndSubcategory.subCategory,
-        variation: {
-          color: 'string',
-          height: '1.99',
-          length: '1.99',
-          materialType: 'string',
-          shape: 'string',
-          size: 'string',
-          unitQuantity: '1.55',
-          width: '1.99',
-        },
-      });
-      console.log(prepareData, 'prepareData');
-      dispatch(submitProducts(prepareData));
+      axios.request(config)
+        .then((res) => {
+          res = res.data.results;
+          console.log(res);
+          localStorage.setItem('pid', res.id);
+          navigate('/catproduct/pricing');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   });
 
+  const [certificate, setCertificate] = useState(null);
+
+  const getBase64 = (file: any) => {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      let res: any = null;
+      reader.onload = function () {
+        resolve(reader.result)
+      };
+      reader.onerror = function (error) {
+        console.log('Error: ', error);
+      };
+    })
+  };
+
+  const uplodaCertificate = async () => {
+    const file_ = document.createElement('input');
+    file_.type = 'file';
+    file_.accept = 'application/pdf';
+    file_.onchange = async (file: any) => {
+      file = file.target.files[0];
+      console.log(file);
+      const base: any = await getBase64(file);
+      setCertificate({ fileName: file.name, base64: base.split('base64,')[1] });
+    };
+    file_.click();
+  };
+
+  useEffect(() => {
+    if (certificate) {
+      setFieldValue('Certificate', 'done');
+    }
+  }, [certificate]);
+
   return (
-    <div className="cater_forms pb-5">
+    <div className="cater_forms pb-5 product-info_">
       <form>
         <div className="form-group row">
           <div className="col-md-6 cts_frmses">
@@ -230,13 +313,15 @@ const ProductVitalInfo = () => {
               onChange={handleChange('productIdType')}
               onBlur={handleBlur('productIdType')}
             >
-              <option value="">Select</option>
-              <option value="1">Most Recent</option>
-              <option value="2">Last Week</option>
-              <option value="3">Last Month</option>
-              <option value="4">Last Year</option>
+              <option disabled>Select</option>
+              <option>Generic</option>
+              <option>GTIN</option>
+              <option>ISBN</option>
+              <option>UPC</option>
+              <option>EAN</option>
             </select>
           </div>
+          <div className='error'>{touched.productIdType ? errors.productIdType : null}</div>
         </div>
 
         <div className="form-group row">
@@ -281,24 +366,17 @@ const ProductVitalInfo = () => {
                 className="form-control"
                 value={values.stockStatus}
                 onBlur={handleBlur('stockStatus')}
-
                 onChange={handleChange('stockStatus')}
               >
-                <option value="">Select</option>
-                <option value="1">Most Recent</option>
-                <option value="2">Last Week</option>
-                <option value="3">Last Month</option>
-                <option value="4">Last Year</option>
+                <option disabled>Select</option>
+                <option>Available</option>
+                <option>Out-off stock</option>
               </select>
             </div>
-          </div>
-          {touched.stockStatus ? (
-            <div className="error" style={{ paddingTop: 20, paddingLeft: 220 }}>
-              {errors.stockStatus}
+            <div className="error" style={{ paddingTop: 20, paddingLeft: '20%' }}>
+              {touched.stockStatus ? errors.stockStatus : ''}
             </div>
-          ) : (
-            ''
-          )}
+          </div>
         </div>
 
         <div className="form-group row">
@@ -315,11 +393,10 @@ const ProductVitalInfo = () => {
               onBlur={handleBlur('weightOfProduct')}
               onChange={handleChange('weightOfProduct')}
             >
-              <option value="">Select</option>
-              <option value="1">Most Recent</option>
-              <option value="2">Last Week</option>
-              <option value="3">Last Month</option>
-              <option value="4">Last Year</option>
+              <option disabled>Select</option>
+              <option>gm</option>
+              <option>kg</option>
+              <option>kg</option>
             </select>
           </div>
           <div className="col-md-6 cts_frmses">
@@ -335,13 +412,15 @@ const ProductVitalInfo = () => {
               onChange={handleChange('unitOfMeasurementOne')}
               onBlur={handleBlur('unitOfMeasurementOne')}
             >
-              <option value="">Select</option>
-              <option value="1">Most Recent</option>
-              <option value="2">Last Week</option>
-              <option value="3">Last Month</option>
-              <option value="4">Last Year</option>
+              <option disabled>Select</option>
+              <option>mm</option>
+              <option>cm</option>
+              <option>m</option>
+              <option>ft</option>
+              <option>in</option>
             </select>
           </div>
+          <div className='error'>{touched.unitOfMeasurementOne ? errors.unitOfMeasurementOne : null}</div>
         </div>
 
         <div className="form-group row">
@@ -358,11 +437,12 @@ const ProductVitalInfo = () => {
               onChange={handleChange('dimensionsOfProduct')}
               onBlur={handleBlur('dimensionsOfProduct')}
             >
-              <option value="">Select</option>
-              <option value="1">Most Recent</option>
-              <option value="2">Last Week</option>
-              <option value="3">Last Month</option>
-              <option value="4">Last Year</option>
+              <option disabled>Select</option>
+              <option>mm</option>
+              <option>cm</option>
+              <option>m</option>
+              <option>ft</option>
+              <option>in</option>
             </select>
           </div>
           <div className="col-md-6 cts_frmses">
@@ -374,17 +454,19 @@ const ProductVitalInfo = () => {
               name="service"
               id="cars"
               className="form-control"
-              value={values.UnitOfMeasurementTwo}
-              onChange={handleChange('UnitOfMeasurementTwo')}
-              onBlur={handleBlur('UnitOfMeasurementTwo')}
+              value={values.unitOfMeasurementTwo}
+              onChange={handleChange('unitOfMeasurementTwo')}
+              onBlur={handleBlur('unitOfMeasurementTwo')}
             >
-              <option value="">Select</option>
-              <option value="1">Most Recent</option>
-              <option value="2">Last Week</option>
-              <option value="3">Last Month</option>
-              <option value="4">Last Year</option>
+              <option disabled>Select</option>
+              <option>mm</option>
+              <option>cm</option>
+              <option>m</option>
+              <option>ft</option>
+              <option>in</option>
             </select>
           </div>
+          <div className='error'>{touched.unitOfMeasurementTwo ? errors.unitOfMeasurementTwo : null}</div>
         </div>
         <div>
           <div className="form-group row">
@@ -397,15 +479,13 @@ const ProductVitalInfo = () => {
                 name="service"
                 id="cars"
                 className="form-control"
-                value={values.CountryOfOrigin}
+                value={null}
                 onChange={handleChange('CountryOfOrigin')}
                 onBlur={handleBlur('CountryOfOrigin')}
               >
-                <option value="">Select</option>
-                <option value="1">Most Recent</option>
-                <option value="2">Last Week</option>
-                <option value="3">Last Month</option>
-                <option value="4">Last Year</option>
+                <option disabled>Select</option>
+                <option>India</option>
+                <option>Nepal</option>
               </select>
             </div>
           </div>
@@ -433,18 +513,18 @@ const ProductVitalInfo = () => {
           </div>
         </div>
 
-        <div className="form-group row">
+        <div className="form-group row" onClick={uplodaCertificate}>
           <div className="col-md-6 cts_frmses">
             <label htmlFor="staticEmail" className="col-form-label">
               <i className="fa fa-info-circle" aria-hidden="true"></i>
               Certificate <span> * </span>
             </label>
-            <CatalogueTextInputField
-              value={values.Certificate}
-              onChange={handleChange('Certificate')}
-              onBlur={handleBlur('Certificate')}
-              error={touched.Certificate ? errors.Certificate : ''}
-            />
+            <div className='form-control'>
+              {certificate ? certificate.fileName : null}
+            </div>
+          </div>
+          <div className='error'>
+            {touched.Certificate ? errors.Certificate : null}
           </div>
         </div>
 
@@ -493,11 +573,9 @@ const ProductVitalInfo = () => {
                 onChange={handleChange('TaxClass')}
                 onBlur={handleBlur('TaxClass')}
               >
-                <option value="">Select</option>
-                <option value="1">Most Recent</option>
-                <option value="2">Last Week</option>
-                <option value="3">Last Month</option>
-                <option value="4">Last Year</option>
+                <option disabled>Select</option>
+                <option>Taxable</option>
+                <option>Non-taxable</option>
               </select>
             </div>
           </div>
@@ -517,21 +595,22 @@ const ProductVitalInfo = () => {
                 <i className="fa fa-info-circle" aria-hidden="true"></i>
                 Colour <span> * </span>
               </label>
-              <select
-                name="service"
+              <label
                 id="cars"
                 className="form-control"
-                value={values.Colour}
+                htmlFor='clr-pcr'
+                style={{ backgroundColor: values.Colour, display: 'flex', alignItems: 'center' }}
+              >
+                Select
+              </label>
+              <input
+                type='color'
                 onChange={handleChange('Colour')}
                 onBlur={handleBlur('Colour')}
-
-              >
-                <option value="">Select</option>
-                <option value="1">Most Recent</option>
-                <option value="2">Last Week</option>
-                <option value="3">Last Month</option>
-                <option value="4">Last Year</option>
-              </select>
+                style={{ display: 'none' }}
+                id='clr-pcr'
+                value={values.Colour}
+              />
             </div>
           </div>
           {touched.Colour ? (
@@ -559,11 +638,9 @@ const ProductVitalInfo = () => {
                 onBlur={handleBlur('shape')}
 
               >
-                <option value="">Select</option>
-                <option value="1">Most Recent</option>
-                <option value="2">Last Week</option>
-                <option value="3">Last Month</option>
-                <option value="4">Last Year</option>
+                <option disabled>Select</option>
+                <option>Square</option>
+                <option>Circle</option>
               </select>
             </div>
           </div>
@@ -590,13 +667,10 @@ const ProductVitalInfo = () => {
                 value={values.materialType}
                 onChange={handleChange('materialType')}
                 onBlur={handleBlur('materialType')}
-
               >
-                <option value="">Select</option>
-                <option value="1">Most Recent</option>
-                <option value="2">Last Week</option>
-                <option value="3">Last Month</option>
-                <option value="4">Last Year</option>
+                <option disabled>Select</option>
+                <option>Nothing</option>
+                <option>Nothing</option>
               </select>
             </div>
           </div>
