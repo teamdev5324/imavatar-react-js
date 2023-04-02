@@ -87,7 +87,15 @@ const AddCatalogueProduct = () => {
                 </NavLink>
               </div>
               <div className="payment-success-content">
-                <h6>Variations</h6>
+              <NavLink to={ROUTER_URL_CONSTANT.CATALOGUE_VARIATIONS}>
+                <h6 
+                className={
+                  location.pathname.includes('catproduct/variations')
+                    ? 'active'
+                    : ''
+                }
+                >Variations</h6>
+              </NavLink>
               </div>
             </div>
 

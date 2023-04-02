@@ -78,6 +78,7 @@ import ViewSuccessfulListing from './pages/catalogue/ViewSuccessfulListing';
 import BulkCatalogueFileReport from './pages/catalogue/BulkCatalogueFileReport';
 import axios from 'axios';
 import BulkCat from './pages/catalogue/bulkCat';
+import Variations from './pages/catalogue/Variations';
 
 function App() {
   const userData = getItem(APP_CONSTANTS.auth_token);
@@ -306,6 +307,10 @@ function App() {
                 <Route
                   path={ROUTER_URL_CONSTANT.CATALOGUE_IMAGES_VIDEOS}
                   element={<ImagesOrVideos />}
+                />
+                <Route
+                  path={ROUTER_URL_CONSTANT.CATALOGUE_VARIATIONS}
+                  element={<Variations />}
                 />
               </Route>
               {/* CATALOGUE ROUTE END */}

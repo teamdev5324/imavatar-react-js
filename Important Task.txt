@@ -1,0 +1,44 @@
+1) onboarding/details => 1) personal details 2) bank details 3) gst in 
+2) profile => personal details
+3) catproduct/info
+4) catproduct/pricing
+5) catproduct/descroition
+
+
+// Imavatar login credtional
+
+email: thepatel5324@gmail.com
+pass:- Admin@2023
+
+
+// catproduct 
+save finish  => submit 
+save and go back  => 
+
+
+"variation": {
+    "color": "string",
+    "height": "string",
+    "length": "string",
+    "materialType": "string",
+    "shape": "string",
+    "size": "string",
+    "unitQuantity": "string",
+    "width": "string"
+  }
+
+
+start Timing : 1) 6:00
+finish timing  2) 8:30 + 
+
+total hours => 3:00 
+
+{"cat":"cat1","subCat":"sub11"}
+
+productvitalinfo.jsx => get 
+
+
+save & go back => navigate
+
+save & finish => 1) save & resonse.data.result => submit => naviagte => catloag main page 
+

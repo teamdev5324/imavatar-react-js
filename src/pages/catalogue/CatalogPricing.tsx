@@ -53,6 +53,7 @@ const CatalogPricing = () => {
       HSNCode: '',
     },
     validationSchema: productVistalInfo,
+    
     onSubmit: async (values) => {
       let cat: any = localStorage.getItem('cat');
       cat = JSON.parse(cat);
